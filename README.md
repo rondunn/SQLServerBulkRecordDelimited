@@ -8,6 +8,10 @@ Implementation of ISQLServerBulkRecord that supports the following features:
 * Sensible defaults
 * Simple demonstration program
 
+Derived from code at:
+
+https://github.com/Microsoft/mssql-jdbc/blob/master/src/main/java/com/microsoft/sqlserver/jdbc/SQLServerBulkCSVFileRecord.java
+
 ## Configuration Settings
 
 ### .fileName(String fileName)
