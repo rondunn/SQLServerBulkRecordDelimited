@@ -29,14 +29,18 @@ Number of lines to skip at beginning of file. Used to step over column header if
 
 Encoding of file to be loaded. Defaults to "UTF-8".
 
+### .buffer(int bufferSize)
+
+Size of the read buffer to be allocated by BufferedReaderDelimited
+
 ### .formatDate(String format)<br/>.formatTime(String format)<br/>.formatTimestamp(String format)<br/>.formatTimestampWithTimezone(String format)
 
 Set file-level formatting of date/time columns. Format strings correspond to the SimpleDateFormat. Default values are:
 
 * Date y-M-d
-* Time H&colon;m&colon;s
-* Timestamp y-M-d H:m:s
-* TimestampWithTimezone y-M-d H:m:s X
+* Time H:&#8203;m&#8203;:s
+* Timestamp y-M-d H:&#8203;m&#8203;:s
+* TimestampWithTimezone y-M-d H:&#8203;m&#8203;:s X
 
 Defaults may be overriden in column() settings.
 
