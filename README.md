@@ -52,5 +52,13 @@ Defaults may be overriden in column() settings.
 
 Define the properties of a column. All columns in the file must be defined, in order of appearance in the file.
 
+### .nullText(String text)
+
+Support an optional mode that will differentiate NULL and EMPTY strings.
+
+The default mode is that any empty string (two consecutive delimiters) will be handled as a NULL value.
+
+The nullText() configuration option supports definition of a text string that will cause consecutive delimiters to be passed as empty strings, and any value set by this option to be translated as a NULL.
+
 ### .open()
 Open file for processing.
