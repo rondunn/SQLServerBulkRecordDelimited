@@ -49,6 +49,7 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 	protected Integer rowDelimiterLength = 1;
 	protected String colDelimiter = ",";
 	protected String encoding = "UTF-8";
+	protected String nullText = null;
 	
 	// Default format strings for dates and times.
 	protected String defaultFormatDate = "y-M-d";
@@ -266,6 +267,19 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 		}
 	
 	/**
+	 * Set the value that will differentiate NULL from an empty string
+	 * in character fields. If this property is not specified, any empty
+	 * value will be loaded as NULL.
+	 * @param text NULL column value, defaults to NULL
+	 * @return this
+	 */
+	
+	public SQLServerBulkRecordDelimited nullText (String text) {
+		this.nullText = text;
+		return this;
+		}
+	
+	/**
 	 * Open the file for loading.
 	 * @return this
 	 * @throws SQLServerException 
@@ -457,6 +471,23 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 			Column col = columns.get(i);
 			SimpleDateFormat sdf = col.format;
 			String value = values[i];
+			
+			// Support the use of nullText to allow differentiation
+			// between NULL and EMPTY strings.
+			
+			if (col.type == Types.CHAR
+				|| col.type == Types.LONGNVARCHAR
+				|| col.type == Types.LONGVARCHAR
+				|| col.type == Types.NCHAR
+				|| col.type == Types.NVARCHAR
+				|| col.type == Types.VARCHAR) {
+				if (this.nullText != null) {
+					if (value == null) value = "";
+					else {
+						if (value.equals(this.nullText)) value = null;
+						}
+					}
+				}
 
 			try {
 
