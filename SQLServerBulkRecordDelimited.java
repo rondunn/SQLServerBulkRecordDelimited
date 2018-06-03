@@ -58,6 +58,7 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 	
 	// File interface
     protected BufferedReaderDelimited reader;
+	protected int readerBufferSize = 4096;
     protected InputStreamReader isr;
     protected FileInputStream fis;
 	
@@ -70,6 +71,17 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 	//--------------------------------------------------------------------------
 	
 	/**
+	 * Set the BufferedReaderDelimited buffer size. Default is 4096.
+	 * @param bufferSize
+	 * @return this
+	 */
+	
+	public SQLServerBulkRecordDelimited bufferSize (int bufferSize) {
+		this.readerBufferSize = bufferSize;
+		return this;
+		}
+	
+	/**
 	 * Specify the column delimiter to be used when parsing an input line.
 	 * @param delimiter String containing one or more characters
 	 * @return this
@@ -77,64 +89,6 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 	
 	public SQLServerBulkRecordDelimited colDelimiter (String delimiter) {
 		this.colDelimiter = delimiter;
-		return this;
-		}
-	
-	/**
-	 * Set the encoding of the input file. Defaults to UTF-8.
-	 * @param encoding
-	 * @return this
-	 */
-
-	public SQLServerBulkRecordDelimited encoding (String encoding) {
-		this.encoding = encoding;
-		return this;
-		}
-	
-	/**
-	 * Set path name of file to be loaded.
-	 * @param fileName
-	 * @return this
-	 */
-
-	public SQLServerBulkRecordDelimited fileName (String fileName) {
-		this.fileName = fileName;
-		return this;
-		}
-	
-	/**
-	 * Specify the row delimiter to be used when parsing the input file.
-	 * @param delimiter String containing one or more characters
-	 * @return this
-	 */
-	
-	public SQLServerBulkRecordDelimited rowDelimiter (String delimiter) {
-		this.rowDelimiter = delimiter.toCharArray();
-		this.rowDelimiterLength = rowDelimiter.length;
-		return this;
-		}
-	
-	/**
-	 * Specify the row delimiter to be used when parsing the input file.
-	 * @param delimiter Array of one or more characters
-	 * @return this
-	 */
-	
-	public SQLServerBulkRecordDelimited rowDelimiter (char[] delimiter) {
-		this.rowDelimiter = delimiter;
-		this.rowDelimiterLength = rowDelimiter.length;
-		return this;
-		}
-	
-	/**
-	 * Set the number of lines to skip at the beginning of a file. Used to
-	 * bypass column headers.
-	 * @param skipLines 
-	 * @return this
-	 */
-
-	public SQLServerBulkRecordDelimited skipLines (Integer skipLines) {
-		this.skipLines = skipLines;
 		return this;
 		}
 	
@@ -240,6 +194,28 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 		}
 	
 	/**
+	 * Set the encoding of the input file. Defaults to UTF-8.
+	 * @param encoding
+	 * @return this
+	 */
+
+	public SQLServerBulkRecordDelimited encoding (String encoding) {
+		this.encoding = encoding;
+		return this;
+		}
+	
+	/**
+	 * Set path name of file to be loaded.
+	 * @param fileName
+	 * @return this
+	 */
+
+	public SQLServerBulkRecordDelimited fileName (String fileName) {
+		this.fileName = fileName;
+		return this;
+		}
+	
+	/**
 	 * Set the format of Dates. Default is y-M-d. May be overridden by the
 	 * column definition. Target database type should be DATE.
 	 * @param format	SimpleDateFormat format string.
@@ -301,7 +277,7 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 			// Open the input file as a reader
 			this.fis = new FileInputStream (fileName);
 			this.isr = new InputStreamReader (fis,encoding);
-			this.reader = new BufferedReaderDelimited (isr);
+			this.reader = new BufferedReaderDelimited (isr,this.readerBufferSize);
 			this.reader.setDelimiter (this.rowDelimiter);
 			}
 		catch (Exception ex) {
@@ -314,6 +290,46 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 		return this;
 		}
 
+	/**
+	 * Specify the row delimiter to be used when parsing the input file.
+	 * @param delimiter String containing one or more characters
+	 * @return this
+	 */
+	
+	public SQLServerBulkRecordDelimited rowDelimiter (String delimiter) {
+		this.rowDelimiter = delimiter.toCharArray();
+		this.rowDelimiterLength = rowDelimiter.length;
+		return this;
+		}
+	
+	/**
+	 * Specify the row delimiter to be used when parsing the input file.
+	 * @param delimiter Array of one or more characters
+	 * @return this
+	 */
+	
+	public SQLServerBulkRecordDelimited rowDelimiter (char[] delimiter) {
+		this.rowDelimiter = delimiter;
+		this.rowDelimiterLength = rowDelimiter.length;
+		return this;
+		}
+	
+	/**
+	 * Set the number of lines to skip at the beginning of a file. Used to
+	 * bypass column headers.
+	 * @param skipLines 
+	 * @return this
+	 */
+
+	public SQLServerBulkRecordDelimited skipLines (Integer skipLines) {
+		this.skipLines = skipLines;
+		return this;
+		}
+	
+	//--------------------------------------------------------------------------
+	//	ISQLServerBulkRecord Interface Implementation
+	//--------------------------------------------------------------------------
+	
     /**
      * Release any resources associated with the file reader.
      * @throws SQLServerException
