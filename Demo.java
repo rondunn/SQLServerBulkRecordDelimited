@@ -12,7 +12,7 @@ public class Demo {
 			
 			// Connect to DW
 
-			Connection dw = DriverManager.getConnection ("jdbc:sqlserver://localhost;databaseName=myDb;user=myUsr;password=myPwd;");
+			Connection dw = DriverManager.getConnection ("jdbc:sqlserver://localhost;databaseName=myDatabase;user=myUser;password=myPassword;");
 	
 			// Set up the Bulk Copy
 
