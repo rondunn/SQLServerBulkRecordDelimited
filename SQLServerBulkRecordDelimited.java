@@ -483,21 +483,17 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 					|| col.type == Types.NCHAR
 					|| col.type == Types.NVARCHAR
 					|| col.type == Types.VARCHAR) {
-					if (this.nullText != null) {
-						if (value == null) value = "";
-						else {
-							if (value.equals(this.nullText)) value = null;
-							}
-						}
+					if (this.nullText != null && value.equals(this.nullText)) value = null;
 					}
-				
-				// If it isn't a string, an empty value is a NULL.
-				
 				else {
-					if (value.length() < 1) o[i] = null;
+					if (value.length() < 1) value = null;
 					}
+				
+				// Perform type conversions to create output objects.
 
-				if (col.type == Types.INTEGER) {
+				if (value == null) o[i] = null;
+				
+				else if (col.type == Types.INTEGER) {
 					o[i] = Integer.valueOf(value);
 					}
 

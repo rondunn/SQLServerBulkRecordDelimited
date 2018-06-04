@@ -13,7 +13,7 @@ public class Demo {
 			// Connect to DW
 
 			Connection dw = DriverManager.getConnection ("jdbc:sqlserver://localhost;databaseName=myDb;user=myUsr;password=myPwd;");
-
+	
 			// Set up the Bulk Copy
 
 			SQLServerBulkCopy bcp = new SQLServerBulkCopy (dw);
@@ -30,8 +30,10 @@ public class Demo {
 				.fileName ("/Users/ron/test.txt")
 				.rowDelimiter("\n")
 				.colDelimiter(",")
+				.nullText("*NULL*")
 				.column ("c1",java.sql.Types.INTEGER)
 				.column ("c2",java.sql.Types.TIMESTAMP_WITH_TIMEZONE)
+				.column ("c3",java.sql.Types.VARCHAR,30)
 				.open();
 			
 			// Execute the bulk copy
