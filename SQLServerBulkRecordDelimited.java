@@ -472,28 +472,32 @@ public class SQLServerBulkRecordDelimited implements ISQLServerBulkRecord, java.
 			SimpleDateFormat sdf = col.format;
 			String value = values[i];
 			
-			// Support the use of nullText to allow differentiation
-			// between NULL and EMPTY strings.
-			
-			if (col.type == Types.CHAR
-				|| col.type == Types.LONGNVARCHAR
-				|| col.type == Types.LONGVARCHAR
-				|| col.type == Types.NCHAR
-				|| col.type == Types.NVARCHAR
-				|| col.type == Types.VARCHAR) {
-				if (this.nullText != null) {
-					if (value == null) value = "";
-					else {
-						if (value.equals(this.nullText)) value = null;
-						}
-					}
-				}
-
 			try {
 
-				if (value.length() < 1) o[i] = null;
+				// Support the use of nullText to allow differentiation
+				// between NULL and EMPTY strings.
 
-				else if (col.type == Types.INTEGER) {
+				if (col.type == Types.CHAR
+					|| col.type == Types.LONGNVARCHAR
+					|| col.type == Types.LONGVARCHAR
+					|| col.type == Types.NCHAR
+					|| col.type == Types.NVARCHAR
+					|| col.type == Types.VARCHAR) {
+					if (this.nullText != null) {
+						if (value == null) value = "";
+						else {
+							if (value.equals(this.nullText)) value = null;
+							}
+						}
+					}
+				
+				// If it isn't a string, an empty value is a NULL.
+				
+				else {
+					if (value.length() < 1) o[i] = null;
+					}
+
+				if (col.type == Types.INTEGER) {
 					o[i] = Integer.valueOf(value);
 					}
 
